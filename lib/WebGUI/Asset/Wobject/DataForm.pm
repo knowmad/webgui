@@ -523,6 +523,14 @@ sub definition {
             defaultValue=>$session->setting->get("companyEmail"),
         },
         {
+            name=>"replyTo",
+            label=>$i18n->get(15),
+            status=>"hidden",
+            isMailField=>1,
+            width=>0,
+            type=>"email",
+        },
+        {
             name=>"cc",
             label=>$i18n->get(12),
             status=>"hidden",
@@ -1125,6 +1133,7 @@ sub sendEmail {
     my $to = $entry->field('to');
     my $subject = $entry->field('subject');
     my $from = $entry->field('from');
+    my $replyTo = $entry->field('replyTo');
     my $bcc = $entry->field('bcc');
     my $cc = $entry->field('cc');
     my $message = $self->processTemplate($var, $self->get("emailTemplateId"));
@@ -1135,7 +1144,7 @@ sub sendEmail {
     if ($to =~ /\@/) {
         my $mail = WebGUI::Mail::Send->create($self->session,{
             to      => $to,
-            replyTo => $from,
+            replyTo => $replyTo,
             subject => $subject,
             cc      => $cc,
             from    => $from,
